@@ -7,6 +7,6 @@ resource "aws_kms_alias" "code_credentials" {
 }
 
 module "secure_parameter" {
-  source = "../../"
+  source = "github.com/falktan/terraform-aws-secure-parameter.git"
   secrets = jsondecode(file("secrets.json"))
 }

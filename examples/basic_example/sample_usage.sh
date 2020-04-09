@@ -23,3 +23,13 @@ echo \
 echo "Running terraform apply for the second time to add created credentials"
 echo "----------------------"
 terraform apply
+
+echo "Accessing parameter WITHOUT decryption"
+aws ssm get-parameters --no-with-decryption \
+  --query "Parameters[*].{Name:Name,Value:Value}" \
+  --names sample_secret1 sample_secret1
+
+echo "Accessing parameter WITH decryption"
+aws ssm get-parameters --with-decryption \
+  --query "Parameters[*].{Name:Name,Value:Value}" \
+  --names sample_secret1 sample_secret2
