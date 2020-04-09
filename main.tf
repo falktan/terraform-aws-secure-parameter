@@ -1,13 +1,18 @@
 data "aws_kms_secrets" "secrets" {
+  count = length(var.secrets) == 0 ? 0:1
+
   dynamic "secret" {
     for_each = var.secrets
-    name = each.key
-    payload = each.value
+
+    content {
+      name = secret.key
+      payload = secret.value
+    }
   }
 }
 
 resource "aws_ssm_parameter" "secrets" {
-  for_each = data.aws_kms_secrets.secrets.plaintext
+  for_each = length(var.secrets) == 0 ? {} : data.aws_kms_secrets.secrets[0].plaintext
 
   name = each.key
   value = each.value
